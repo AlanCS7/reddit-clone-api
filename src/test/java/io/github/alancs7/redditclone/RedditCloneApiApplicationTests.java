@@ -1,4 +1,4 @@
-package io.github.alancs7.redditcloneapi;
+package io.github.alancs7.redditclone;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

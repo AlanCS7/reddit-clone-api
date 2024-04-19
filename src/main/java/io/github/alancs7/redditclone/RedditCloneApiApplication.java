@@ -1,4 +1,4 @@
-package io.github.alancs7.redditcloneapi;
+package io.github.alancs7.redditclone;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
