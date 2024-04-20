@@ -1,6 +1,8 @@
 package io.github.alancs7.redditclone.service;
 
 import io.github.alancs7.redditclone.dto.RegisterRequest;
+import io.github.alancs7.redditclone.exception.RedditCloneException;
+import io.github.alancs7.redditclone.exception.ResourceNotFoundException;
 import io.github.alancs7.redditclone.model.NotificationEmail;
 import io.github.alancs7.redditclone.model.User;
 import io.github.alancs7.redditclone.model.VerificationToken;
@@ -24,7 +26,7 @@ public class AuthService {
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
-        User user = new User();
+        var user = new User();
         user.setEmail(registerRequest.email());
         user.setUsername(registerRequest.username());
         user.setPassword(passwordEncoder.encode(registerRequest.password()));
@@ -32,7 +34,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        String token = generateVerificationToken(user);
+        var token = generateVerificationToken(user);
 
         mailService.sendMail(new NotificationEmail(
                 "Please activate your account",
@@ -42,13 +44,32 @@ public class AuthService {
     }
 
     private String generateVerificationToken(User user) {
-        String token = UUID.randomUUID().toString();
+        var token = UUID.randomUUID().toString();
 
-        VerificationToken verificationToken = new VerificationToken();
+        var verificationToken = new VerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);
 
         verificationTokenRepository.save(verificationToken);
         return token;
+    }
+
+    @Transactional
+    public void verifyAccount(String token) {
+        var verificationToken = verificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new RedditCloneException("Invalid token"));
+
+        fetchUserAndEnable(verificationToken);
+    }
+
+    @Transactional
+    protected void fetchUserAndEnable(VerificationToken verificationToken) {
+        var username = verificationToken.getUser().getUsername();
+
+        var user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username " + username));
+
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 }
