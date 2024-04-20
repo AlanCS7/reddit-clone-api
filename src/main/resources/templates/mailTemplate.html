@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification e-mail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #fff; /* Cor do texto */
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #3e4656; /* Nova cor do cabeçalho */
+            color: #fff;
+            padding: 20px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .content {
+            padding: 20px;
+            color: #6c757d;
+            text-align: center;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 14px;
+            color: #6c757d;
+            text-align: center;
+        }
+
+        .activation-link {
+            background-color: #3e4656;
+            padding: 10px 40px;
+            text-decoration: none;
+            border: none;
+            border-radius: 50px;
+            margin: 10px 0;
+            display: inline-block;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Let's confirm your registration e-mail?</h1>
+    </div>
+    <div class="content">
+        <a th:href="${message}" class="activation-link">
+            Activate account
+        </a>
+    </div>
+    <div class="footer">
+        <p>Powered by Reddit</p>
+    </div>
+</div>
+</body>
+</html>

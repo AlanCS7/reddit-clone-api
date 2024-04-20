@@ -13,6 +13,9 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "UK_VERIFICATION_TOKEN_USER", columnNames = "user_id")
+})
 public class VerificationToken {
 
     @Id
@@ -22,6 +25,7 @@ public class VerificationToken {
     private String token;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_VERIFICATION_TOKEN_USER"))
     private User user;
 
     private Instant expiryDate;
