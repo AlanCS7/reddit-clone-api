@@ -2,6 +2,7 @@ package io.github.alancs7.redditclone.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Subreddit {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "subreddit")
     private List<Post> posts;
 
+    @CreationTimestamp
     private Instant createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -3,6 +3,7 @@ package io.github.alancs7.redditclone.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -24,6 +25,7 @@ public class Comment {
     @JoinColumn(name = "post_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_COMMENT_POST"))
     private Post post;
 
+    @CreationTimestamp
     private Instant createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
