@@ -54,7 +54,7 @@
             text-align: center;
         }
 
-        .activation-link {
+        .message {
             background-color: #3e4656;
             padding: 10px 40px;
             text-decoration: none;
@@ -69,12 +69,10 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Let's confirm your registration e-mail?</h1>
+        <h1>New messages</h1>
     </div>
     <div class="content">
-        <a th:href="${message}" class="activation-link">
-            Activate account
-        </a>
+        <span th:text="${message}" class="message"></span>
     </div>
     <div class="footer">
         <p>Powered by Reddit</p>

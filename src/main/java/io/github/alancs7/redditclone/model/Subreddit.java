@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Getter
@@ -27,7 +27,7 @@ public class Subreddit {
     private List<Post> posts;
 
     @CreationTimestamp
-    private Instant createdAt;
+    private OffsetDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_SUBREDDIT_USER"))

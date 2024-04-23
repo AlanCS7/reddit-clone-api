@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -28,6 +28,6 @@ public class VerificationToken {
     @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_VERIFICATION_TOKEN_USER"))
     private User user;
 
-    private Instant expiryDate;
+    private OffsetDateTime expiryDate;
 
 }

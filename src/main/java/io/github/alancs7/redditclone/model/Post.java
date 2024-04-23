@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -32,7 +32,7 @@ public class Post {
     private User user;
 
     @CreationTimestamp
-    private Instant createdAt;
+    private OffsetDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subreddit_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_POST_SUBREDDIT"))

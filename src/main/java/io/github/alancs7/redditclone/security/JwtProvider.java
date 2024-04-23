@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 
 @Service
@@ -32,8 +32,8 @@ public class JwtProvider {
     public String generateTokenWithUsername(String username) {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
-                .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plusMillis(getJwtExpirationInMillis()))
+                .issuedAt(OffsetDateTime.now().toInstant())
+                .expiresAt(OffsetDateTime.now().toInstant().plusMillis(getJwtExpirationInMillis()))
                 .subject(username)
                 .claim("scopes", "ROLE_USER")
                 .build();
