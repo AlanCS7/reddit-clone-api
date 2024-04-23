@@ -15,13 +15,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthService {
 
@@ -32,7 +35,6 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
-    @Transactional
     public void signup(RegisterRequest registerRequest) {
         var user = new User();
         user.setEmail(registerRequest.email());
@@ -51,18 +53,6 @@ public class AuthService {
         ));
     }
 
-    private String generateVerificationToken(User user) {
-        var token = UUID.randomUUID().toString();
-
-        var verificationToken = new VerificationToken();
-        verificationToken.setToken(token);
-        verificationToken.setUser(user);
-
-        verificationTokenRepository.save(verificationToken);
-        return token;
-    }
-
-    @Transactional
     public void verifyAccount(String token) {
         var verificationToken = verificationTokenRepository.findByToken(token)
                 .orElseThrow(() -> new RedditCloneException("Invalid token"));
@@ -70,7 +60,6 @@ public class AuthService {
         fetchUserAndEnable(verificationToken);
     }
 
-    @Transactional
     protected void fetchUserAndEnable(VerificationToken verificationToken) {
         var username = verificationToken.getUser().getUsername();
 
@@ -91,5 +80,25 @@ public class AuthService {
         String token = jwtProvider.generateToken(authenticate);
 
         return new AuthenticationResponse(token, loginRequest.username());
+    }
+
+    @Transactional(readOnly = true)
+    public User getCurrentUser() {
+        Jwt principal = (Jwt) SecurityContextHolder.
+                getContext().getAuthentication().getPrincipal();
+
+        return userRepository.findByUsername(principal.getSubject())
+                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getSubject()));
+    }
+
+    private String generateVerificationToken(User user) {
+        var token = UUID.randomUUID().toString();
+
+        var verificationToken = new VerificationToken();
+        verificationToken.setToken(token);
+        verificationToken.setUser(user);
+
+        verificationTokenRepository.save(verificationToken);
+        return token;
     }
 }

@@ -1,9 +1,8 @@
 package io.github.alancs7.redditclone.service;
 
 import io.github.alancs7.redditclone.dto.SubredditDto;
-import io.github.alancs7.redditclone.exception.ResourceNotFoundException;
+import io.github.alancs7.redditclone.exception.SubredditNotFoundException;
 import io.github.alancs7.redditclone.mapper.SubredditMapper;
-import io.github.alancs7.redditclone.model.Subreddit;
 import io.github.alancs7.redditclone.repository.SubredditRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ public class SubredditService {
 
     @Transactional
     public SubredditDto save(SubredditDto subredditDto) {
-        Subreddit save = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDto));
+        var save = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDto));
         subredditDto.setId(save.getId());
 
         return subredditDto;
@@ -38,8 +37,8 @@ public class SubredditService {
 
     @Transactional(readOnly = true)
     public SubredditDto getSubreddit(Long id) {
-        Subreddit subreddit = subredditRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No subreddit found with ID: " + id));
+        var subreddit = subredditRepository.findById(id)
+                .orElseThrow(() -> new SubredditNotFoundException("No subreddit found with ID: " + id));
 
         return subredditMapper.mapSubredditToDto(subreddit);
     }

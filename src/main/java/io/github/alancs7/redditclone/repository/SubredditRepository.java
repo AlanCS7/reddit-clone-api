@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SubredditRepository extends JpaRepository<Subreddit, Long> {
 
     @Query("FROM Subreddit s LEFT JOIN FETCH s.posts")
     List<Subreddit> findAll();
+
+    Optional<Subreddit> findByName(String subredditName);
 }
