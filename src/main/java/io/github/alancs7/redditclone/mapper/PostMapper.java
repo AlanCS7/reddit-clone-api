@@ -5,11 +5,17 @@ import io.github.alancs7.redditclone.dto.PostResponse;
 import io.github.alancs7.redditclone.model.Post;
 import io.github.alancs7.redditclone.model.Subreddit;
 import io.github.alancs7.redditclone.model.User;
+import io.github.alancs7.redditclone.repository.CommentRepository;
+import io.github.alancs7.redditclone.util.TimeAgo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
-public interface PostMapper {
+public abstract class PostMapper {
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Mapping(target = "id", source = "postRequest.id")
     @Mapping(target = "name", source = "postRequest.postName")
@@ -19,7 +25,7 @@ public interface PostMapper {
     @Mapping(target = "voteCount", constant = "0")
     @Mapping(target = "user", source = "user")
     @Mapping(target = "createdAt", ignore = true)
-    Post map(PostRequest postRequest, Subreddit subreddit, User user);
+    public abstract Post map(PostRequest postRequest, Subreddit subreddit, User user);
 
     @Mapping(target = "id", source = "post.id")
     @Mapping(target = "postName", source = "post.name")
@@ -27,6 +33,17 @@ public interface PostMapper {
     @Mapping(target = "description", source = "post.description")
     @Mapping(target = "subredditName", source = "post.subreddit.name")
     @Mapping(target = "userName", source = "post.user.username")
-    PostResponse mapToDto(Post post);
+    @Mapping(target = "voteCount", source = "post.voteCount")
+    @Mapping(target = "commentCount", expression = "java(commentCount(post))")
+    @Mapping(target = "duration", expression = "java(getDuration(post))")
+    public abstract PostResponse mapToDto(Post post);
+
+    protected Integer commentCount(Post post) {
+        return commentRepository.findCommentsByPost(post).size();
+    }
+
+    protected String getDuration(Post post) {
+        return TimeAgo.using(post.getCreatedAt().toInstant().toEpochMilli());
+    }
 
 }
