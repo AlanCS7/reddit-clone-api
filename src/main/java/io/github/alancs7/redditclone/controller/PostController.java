@@ -34,12 +34,12 @@ public class PostController {
     }
 
     @GetMapping(params = "subredditId")
-    public ResponseEntity<List<PostResponse>> getPostsBySubreddit(@RequestParam("subredditId") Long subredditId) {
+    public ResponseEntity<List<PostResponse>> getPostsBySubreddit(@RequestParam(value = "subredditId", required = false) Long subredditId) {
         return ResponseEntity.ok(postService.getPostsBySubreddit(subredditId));
     }
 
     @GetMapping(params = "username")
-    public ResponseEntity<List<PostResponse>> getPostsByUsername(@RequestParam("username") String username) {
+    public ResponseEntity<List<PostResponse>> getPostsByUsername(@RequestParam(value = "username", required = false) String username) {
         return ResponseEntity.ok(postService.getPostsByUsername(username));
     }
 }
