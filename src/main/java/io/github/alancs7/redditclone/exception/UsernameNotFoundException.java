@@ -1,12 +1,9 @@
 package io.github.alancs7.redditclone.exception;
 
-public class UsernameNotFoundException extends RuntimeException {
+public class UsernameNotFoundException extends ResourceNotFoundException {
 
     public UsernameNotFoundException(String message) {
         super(message);
     }
 
-    public UsernameNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }
