@@ -14,7 +14,7 @@ import java.util.List;
 public class OpenAPIConfig {
 
     @Bean
-    public OpenAPI openAPI() {
+    OpenAPI openAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("Reddit Clone API")
