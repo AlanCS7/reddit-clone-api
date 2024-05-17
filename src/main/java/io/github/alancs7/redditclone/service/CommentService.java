@@ -2,6 +2,7 @@ package io.github.alancs7.redditclone.service;
 
 import io.github.alancs7.redditclone.dto.CommentDto;
 import io.github.alancs7.redditclone.exception.PostNotFoundException;
+import io.github.alancs7.redditclone.exception.RedditCloneException;
 import io.github.alancs7.redditclone.exception.UsernameNotFoundException;
 import io.github.alancs7.redditclone.mapper.CommentMapper;
 import io.github.alancs7.redditclone.model.NotificationEmail;
@@ -70,5 +71,12 @@ public class CommentService {
                 user.getEmail(),
                 message
         ));
+    }
+
+    public boolean containsSwearWords(String comment) {
+        if (comment.contains("shit")) {
+            throw new RedditCloneException("Comments contains unacceptable language");
+        }
+        return false;
     }
 }
